@@ -8,7 +8,7 @@ Bitcoin_Status::Bitcoin_Status(int initial_value, char* id):initial_value(initia
   this->bitcoin_id = (char*)malloc(sizeof(char)*(strlen(id)+1));
   strcpy(this->bitcoin_id,id);
 
-  transaction_tree = new Transaction_tree()
+  transaction_tree = new Transaction_tree();
 }
 
 Bitcoin_Status::~Bitcoin_Status() {

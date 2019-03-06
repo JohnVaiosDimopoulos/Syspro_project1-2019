@@ -4,18 +4,19 @@
 #include <cstring>
 #include "Hash_Bucket.h"
 
-template <class T,int N>
+template <class T>
 class Hash_Table{
 
  private:
-  Hash_Bucket<T>* table[N];
+  Hash_Bucket<T>** table;
   const int bucket_size;
+  const int table_size;
   unsigned int Hash_fun(char*);
 
  public:
 
   //constructor-destructor
-  Hash_Table(int);
+  Hash_Table(int,int);
   ~Hash_Table();
 
   //Functionality
@@ -25,37 +26,41 @@ class Hash_Table{
 };
 
 //===CONSTRUCTOR-DESTRUCTOR==//
-template <class T,int N>
-Hash_Table<T,N>::Hash_Table(const int bucket_size):bucket_size(bucket_size){
-  for(int i=0;i<N;i++){
-    this->table[i] = new Hash_Bucket<T>();
+template <class T>
+Hash_Table<T>::Hash_Table(const int bucket_size,const int table_size):bucket_size(bucket_size),table_size(table_size){
+  this->table = new Hash_Bucket<T>* [table_size];
+
+  for(int i =0;i<table_size;i++){
+    table[i] = new Hash_Bucket<T>();
   }
 }
 
 
-template <class T,int N>
-Hash_Table<T,N>::~Hash_Table() {
-  for(int i=0;i<N;i++){
+template <class T>
+Hash_Table<T>::~Hash_Table() {
+  for(int i=0;i<table_size;i++){
     delete this->table[i];
   }
+
+  delete[] this->table;
 }
 
 //===PRIVATE===//
 
-template <class T,int N>
-unsigned int Hash_Table<T,N>::Hash_fun(char* id) {
+template <class T>
+unsigned int Hash_Table<T>::Hash_fun(char* id) {
   //SAX hash function for strings
 
   unsigned int hash_value = 0;
   for(int i=0;i<strlen(id);i++){
     hash_value ^=(hash_value<<5)+(hash_value>>2)+id[i];
   }
-  return hash_value%N;
+  return hash_value%table_size;
 }
 
 //===FUNCTIONALITY===//
-template <class T,int N>
-void Hash_Table<T,N>::Insert(T item, char* item_id) {
+template <class T>
+void Hash_Table<T>::Insert(T item, char* item_id) {
   //get the hash
   unsigned int hash_value = Hash_fun(item_id);
 
@@ -95,8 +100,8 @@ void Hash_Table<T,N>::Insert(T item, char* item_id) {
 }
 
 
-template <class T,int N>
-T Hash_Table<T,N>::Search(char* id) {
+template <class T>
+T Hash_Table<T>::Search(char* id) {
 
   //hash the id
   unsigned int hash_value = Hash_fun(id);

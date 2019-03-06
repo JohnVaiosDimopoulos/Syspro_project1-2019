@@ -26,8 +26,6 @@ class Bitcoin_Status {
   void update_unspend_amount(int&);
   void increase_transaction_number();
 
-  //other
-
 };
 
 #endif //PROJECT1_VER3_BITCOIN_STATUS_H
