@@ -20,11 +20,15 @@ class Bitcoin_Status {
   int get_initial_value() const;
   int get_unspend_amount() const;
   int get_transactions_number() const;
+  char* get_id() const;
   Transaction_tree* get_transaction_tree() const;
 
   //mutators
   void update_unspend_amount(int&);
   void increase_transaction_number();
+
+  //opperator
+  bool operator==(const char*);
 
 };
 

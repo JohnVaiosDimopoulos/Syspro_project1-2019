@@ -23,6 +23,11 @@ class Hash_Table{
   void Insert(T,char*);
   T Search(char*);
 
+  //debugging(delete before commit the project)
+  Hash_Bucket<T>* get_Bucket(int& index) const{
+    return this->table[index];
+  }
+
 };
 
 //===CONSTRUCTOR-DESTRUCTOR==//

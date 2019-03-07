@@ -33,6 +33,10 @@ int Bitcoin_Status::get_initial_value() const {
   return this->initial_value;
 }
 
+char* Bitcoin_Status::get_id() const {
+  return this->bitcoin_id;
+}
+
 //==MUTATORS==//
 
 void Bitcoin_Status::increase_transaction_number() {
@@ -42,4 +46,14 @@ void Bitcoin_Status::increase_transaction_number() {
 void Bitcoin_Status::update_unspend_amount(int& amount) {
 
   this->unspend_amount = this->unspend_amount-amount;
+}
+
+
+//===OPPERATOR==//
+
+bool Bitcoin_Status::operator==(const char *id) {
+  if(!strcmp(this->bitcoin_id,id)){
+    return true;
+  } else
+    return false;
 }

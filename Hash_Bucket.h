@@ -39,6 +39,8 @@ Hash_Bucket<T>::Hash_Bucket() {
 
 template <class T>
 Hash_Bucket<T>::~Hash_Bucket() {
+  if(next!=NULL)
+    delete next;
   delete this->item_list;
 }
 

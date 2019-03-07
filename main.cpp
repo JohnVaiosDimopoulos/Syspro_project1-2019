@@ -1,8 +1,8 @@
 #include <iostream>
 #include <fstream>
 #include <istream>
-//#include "Hash_Table.h"
-//#include "Wallet_info.h"
+#include "Hash_Table.h"
+#include "Wallet_info.h"
 #include "Bitcoin_System.h"
 
 
@@ -38,8 +38,8 @@ static void calculate_tables_sizes(int* bitcoin_table_size,int* user_table_size,
   int wallet_id_entries_per_bucker;
 
   //calculate the number of entries in each bucket
-  bitcoin_entries_per_bucket = bucket_size/(sizeof(Bitcoin_Status)+ sizeof(Hash_Bucket<Bitcoin_Status*>*)+ sizeof(unsigned int));
-  wallet_id_entries_per_bucker = bucket_size/ (sizeof(Wallet_info)+ sizeof(Hash_Bucket<Wallet_info*>*)+ sizeof(unsigned int));
+  bitcoin_entries_per_bucket = (bucket_size - (sizeof(Hash_Bucket<Bitcoin_Status*>*)+ sizeof(unsigned int)))/sizeof(Bitcoin_Status*);
+  wallet_id_entries_per_bucker = (bucket_size-(sizeof(Hash_Bucket<Wallet_info*>*)+ sizeof(unsigned int)))/ sizeof(Wallet_info*);
 
   //in order to avoid collisions we want an average of 70% loading factor in each bucket
   //with that in mind we calculate the size of the table in order to achieve that
@@ -92,25 +92,26 @@ static void manage_inline_arguments(int argc,char** argv,int*bucket_size,int* bi
 
 
 int main(int argc,char** argv) {
+
 /*
   const int size = 4;
 
-  Wallet_info* user = new Wallet_info("name");
-  Hash_Table<Wallet_info*,size>* ht = new Hash_Table<Wallet_info*,size>(10);
-  ht->Insert(user,user->get_wallet_id());
-  Wallet_info* usr = ht->Search("name");
-  List<Bitcoin_in_wallet*>*  list =usr->get_list();
+  Wallet_info user("name");
+  Hash_Table<Wallet_info>* ht = new Hash_Table<Wallet_info>(10,size);
+  ht->Insert(user,user.get_wallet_id());
+  Wallet_info usr = ht->Search("name");
+  List<Bitcoin_in_wallet*>*  list =usr.get_list();
   Bitcoin_in_wallet* coin = new Bitcoin_in_wallet("123",40);
   list->Push(coin);
   list->Delete("123");
   delete ht;
+
 */
 
 
 
-
   int bitcoin_val,sender_hash_table_entries,receiver_hash_table_entries,bucket_size,total_users,total_bitcoins,bitcoins_table_size,users_table_size;
-   char* bitcoin_balance,*transaction_file;
+  char* bitcoin_balance,*transaction_file;
 
    // manage inline arguments
    manage_inline_arguments(argc,argv,&bucket_size,&bitcoin_val,&sender_hash_table_entries,&receiver_hash_table_entries,&bitcoin_balance,&transaction_file);
@@ -123,7 +124,11 @@ int main(int argc,char** argv) {
    Bitcoin_System* system = new Bitcoin_System(bucket_size,sender_hash_table_entries,receiver_hash_table_entries,bitcoins_table_size,users_table_size,bitcoin_val);
 
    system->Initialize_System(bitcoin_balance);
-   system->Initial_Transactions(bitcoin_balance);
-   system->Begin_System();
+//   system->Initial_Transactions(transaction_file);
+//   system->Begin_System();
+
+  delete system;
+  free(transaction_file);
+  free(bitcoin_balance);
 }
 
