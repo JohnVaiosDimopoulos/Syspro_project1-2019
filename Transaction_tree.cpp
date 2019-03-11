@@ -2,7 +2,6 @@
 #include "List.h"
 #include <cstdlib>
 #include <cstring>
-//TODO: make the tree
 
 
 //==CONSTRUCTOR-DESTRUCTOR==//
