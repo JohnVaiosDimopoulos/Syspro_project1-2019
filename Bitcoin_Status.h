@@ -6,6 +6,7 @@
 class Bitcoin_Status {
  private:
   char* bitcoin_id;
+  char* initial_owner;
   const int initial_value;
   int unspend_amount;
   int transactions_number;
@@ -13,7 +14,7 @@ class Bitcoin_Status {
 
  public:
   //constructor-destructor
-  Bitcoin_Status(int,char*);
+  Bitcoin_Status(int,char*,char*);
   ~Bitcoin_Status();
 
   //acessors
@@ -26,6 +27,10 @@ class Bitcoin_Status {
   //mutators
   void update_unspend_amount(int&);
   void increase_transaction_number();
+
+  //functionality
+  void New_Transaction(Transaction_info*,char*,char*,int);
+  void Print_Transactions(int);
 
   //opperator
   bool operator==(const char*);

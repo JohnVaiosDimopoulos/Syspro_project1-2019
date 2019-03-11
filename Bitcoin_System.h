@@ -8,6 +8,7 @@
 
 class Bitcoin_System {
  private:
+  const int bucket_size;
   const int bitcoin_value;
   Hash_Table<Wallet_info*>* wallets;
   Hash_Table<Bitcoin_Status*>* bitcoins_status;

@@ -14,11 +14,16 @@ class List{
   List();
   ~List();
 
+  //accessor
+  List_node<T>* get_head();
+
   //functionality
   bool is_empty();
   void Push(T);
   T Search(const char*);
+  T Search(int&);
   void Delete(const char*);
+  void Nullify();
 };
 
 //===CONSTRUCTOR-DESTRUCTOR==//
@@ -34,6 +39,14 @@ List<T>::~List() {
   if (this->head!=NULL)
     delete head;
 }
+
+//===ACCESSOR===//
+
+template <class T>
+List_node<T>* List<T>::get_head() {
+  return this->head;
+}
+
 
 //===FUNCTIONALITY===//
 
@@ -66,6 +79,21 @@ T List<T>::Search(const char* id) {
       current = current->get_next();
   }
   return NULL;
+}
+
+
+template <class T>
+T List<T>::Search(int& value){
+  if(this->is_empty())
+    return NULL;
+  List_node<T>* current = this->head;
+  while (current!=NULL){
+    if(current->compare_item(value))
+      return current->get_item();
+    else
+      current=current->get_item();
+  }
+
 }
 
 
@@ -107,6 +135,14 @@ void List<T>::Delete(const char* id) {
     }
 
   }
+}
 
+template <class T>
+void List<T>::Nullify() {
+  List_node<T>* current = this->head;
+  while (current!=NULL){
+    current->set_item(NULL);
+    current->get_next();
+  }
 }
 #endif //PROJECT1_VER3_LIST_H

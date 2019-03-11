@@ -22,6 +22,7 @@ class Hash_Table{
   //Functionality
   void Insert(T,char*);
   T Search(char*);
+  void Nullify();
 
   //debugging(delete before commit the project)
   Hash_Bucket<T>* get_Bucket(int& index) const{
@@ -125,6 +126,13 @@ T Hash_Table<T>::Search(char* id) {
     else
       current = current->get_next();
 
+  }
+}
+
+template <class T>
+void Hash_Table<T>::Nullify() {
+  for(int i =0;i<this->table_size;i++){
+    this->table[i]
   }
 }
 

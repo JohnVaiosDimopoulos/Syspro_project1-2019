@@ -24,6 +24,7 @@ class List_node{
 
   //other
   bool compare_item(const char*);
+  bool compare_item(int&);
 };
 
 //==CONSTRUCTOR-DESTRUCTOR==//
@@ -75,6 +76,16 @@ bool List_node<T>::compare_item(const char* id) {
     return true;
   else
     return false;
+}
+
+
+template <class T>
+bool List_node<T>::compare_item(int& value){
+  if(*(this->item)==value)
+    return true;
+  else
+    return false;
+
 }
 
 #endif //PROJECT1_VER3_LIST_NODE_H

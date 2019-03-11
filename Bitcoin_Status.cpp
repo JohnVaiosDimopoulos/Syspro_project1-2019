@@ -1,14 +1,18 @@
 #include "Bitcoin_Status.h"
+#include "Hash_Table.h"
 #include <cstring>
 #include <cstdlib>
 
 //==CONSTRACTOR-DESTRUCTOR==//
 
-Bitcoin_Status::Bitcoin_Status(int initial_value, char* id):initial_value(initial_value) {
+Bitcoin_Status::Bitcoin_Status(int initial_value, char* id,char* initial_owner):initial_value(initial_value) {
   this->bitcoin_id = (char*)malloc(sizeof(char)*(strlen(id)+1));
   strcpy(this->bitcoin_id,id);
 
-  transaction_tree = new Transaction_tree();
+  this->initial_owner= (char*)malloc(sizeof(char)*(strlen(initial_owner)+1));
+  strcpy(this->initial_owner,initial_owner);
+
+  transaction_tree = new Transaction_tree(this->initial_value,initial_owner);
 }
 
 Bitcoin_Status::~Bitcoin_Status() {
@@ -46,6 +50,39 @@ void Bitcoin_Status::increase_transaction_number() {
 void Bitcoin_Status::update_unspend_amount(int& amount) {
 
   this->unspend_amount = this->unspend_amount-amount;
+}
+
+
+//==FUNCTIONALITY==//
+
+void Bitcoin_Status::New_Transaction(Transaction_info* info,char* sender,char* receiver,int transaction_amount) {
+  this->transaction_tree->New_Transaction(info,sender,receiver,transaction_amount);
+}
+
+
+void Bitcoin_Status::Print_Transactions(int bucket_size){
+
+  // we need a hash_table to use it a blocked set for the transactions
+
+  //first calculate the size of the table
+  int table_size;
+  if(transactions_number!=0){
+    // we want 70% loading factor
+    int entries_per_bucket = (bucket_size- (sizeof(Hash_Bucket<Transaction_info*>)+ sizeof(unsigned int)/ sizeof(Transaction_info*)));
+    table_size = transactions_number/(0.7*entries_per_bucket);
+  }
+  else
+    table_size = 1;
+
+  //create the table
+  Hash_Table<Transaction_info*>* visited = new Hash_Table<Transaction_info*>(bucket_size,table_size);
+  //Print the transactions
+  this->transaction_tree->Print_transactions(visited,this->transaction_tree->get_root());
+  //Nullify the table and delete it
+  visited->Nullify();
+  delete visited;
+
+
 }
 
 

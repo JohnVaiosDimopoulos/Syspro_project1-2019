@@ -25,6 +25,7 @@ class Hash_Bucket{
   //functionality
   T Search(const char*);
   void Insert(T);
+  void Nullify();
 
 };
 
@@ -77,3 +78,17 @@ void Hash_Bucket<T>::Insert(T item) {
 }
 
 #endif //PROJECT1_VER3_HASH_BUCKET_H
+
+
+template <class T>
+void Hash_Bucket<T>::Nullify() {
+
+  //if there are other buckets in the chain we need to nullify them too
+  if(this->next!=NULL){
+    this->next->Nullify();
+  }
+
+  // Nullify the current by nullifing the list
+  this->item_list->Nullify();
+
+}

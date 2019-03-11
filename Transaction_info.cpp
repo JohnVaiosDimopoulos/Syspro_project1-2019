@@ -1,6 +1,7 @@
 #include "Transaction_info.h"
-#include "cstdlib"
-#include "cstring"
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
 
 //====Constructor-Destructor====//
 
@@ -44,8 +45,21 @@ int Transaction_info::get_day() {
   return this->day;
 }
 
+int Transaction_info::get_hour() {
+  return this->hour;
+}
+
+int Transaction_info::get_minutes() {
+  return this->minutes;
+}
+
 char* Transaction_info::get_transaction_id() {
   return this->transaction_id;
+}
+
+
+void Transaction_info::print_info() {
+  std::cout<<"Transaction: "<<this->transaction_id<<" Sender: "<<this->sender_id<<" Receiver: "<<this->receiver_id<<" Amount: "<<this->amount<<"Date: "<<this->day<<"-"<<this->month<<"-"<<this->year<<" Time:"<<this->hour<<":"<<this->minutes<<std::endl;
 }
 
 //===OTHER==//

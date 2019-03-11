@@ -26,6 +26,9 @@ class Transaction_info {
   int get_year();
   int get_mounth();
   int get_day();
+  int get_hour();
+  int get_minutes();
+  void print_info();
   char* get_transaction_id();
 
   //other
