@@ -16,7 +16,7 @@ Wallet_info::~Wallet_info() {
 }
 
 //==ACCESSORS==//
-List<Bitcoin_in_wallet*>* Wallet_info::get_list() {
+List<Bitcoin_in_wallet*>* Wallet_info::get_list()  const{
   return this->bitcoins_owned;
 }
 
@@ -24,6 +24,32 @@ char* Wallet_info::get_wallet_id() const {
   return this->wallet_id;
 }
 
+int Wallet_info::get_total_money() const {
+  int total_money=0;
+  //traverse the list and sum all the money
+  List_node<Bitcoin_in_wallet*>* current = this->bitcoins_owned->get_head();
+  while (current!=NULL){
+    total_money += current->get_item()->get_value();
+    current = current->get_next();
+  }
+}
+
+
+
+//==MUTATORS==//
+
+void Wallet_info::update_bitcoin_amount(char *bitcoin_id, int amount) {
+  Bitcoin_in_wallet* bitcoin = this->bitcoins_owned->Search(bitcoin_id);
+  // the user does not have that bitcoin
+  if(bitcoin==NULL){
+    //give him that bitcoin
+    bitcoin= new Bitcoin_in_wallet(bitcoin_id,amount);
+    this->bitcoins_owned->Push(bitcoin);
+    return;
+  }
+  // if it has the bitcoin update the amount
+  bitcoin->update_value(amount);
+}
 
 //===OPERATORS==//
 
@@ -32,4 +58,25 @@ bool Wallet_info::operator==(const char* id) {
     return true;
   else
     return false;
+}
+
+
+//===FUNCTIONALITY===//
+
+//checks if there is a bitcoin that has cufficient ammount to make a transaction
+
+char* Wallet_info::Find_proper_bitcoin(int& amount) {
+
+  List_node<Bitcoin_in_wallet*>* current = this->bitcoins_owned->get_head();
+
+  //traverse the list until you find a proper bitcoin and if you do return its id
+  while (current!=NULL){
+    if(current->get_item()->get_value()>=amount)
+      return current->get_item()->get_id();
+    else
+      current=current->get_next();
+  }
+  // is no bitcoin can make the transaction by itself return NULL
+  return NULL;
+
 }

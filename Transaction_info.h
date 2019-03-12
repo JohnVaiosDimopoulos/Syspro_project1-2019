@@ -33,6 +33,9 @@ class Transaction_info {
 
   //other
   bool is_after(int&,int&,int&,int&,int&);
+
+  //opperator
+  bool operator==(const char*);
 };
 
 #endif //PROJECT1_VER3_TRANSACTION_INFO_H

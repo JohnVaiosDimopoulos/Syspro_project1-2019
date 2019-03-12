@@ -20,6 +20,9 @@ class senders_receivers_data {
 
   //functionality
   void Insert(Transaction_info*);
+
+  //opperator
+  bool operator==(const char*);
 };
 
 #endif //PROJECT1_VER3_SENDERS_RECEIVERS_DATA_H

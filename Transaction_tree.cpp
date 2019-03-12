@@ -49,6 +49,20 @@ Transaction_tree_node* Transaction_tree::get_root() const {
 }
 
 
+void Transaction_tree::Insert_token(Transaction_info* info,Transaction_tree_node* current_node,int transaction_amount,char* sender,char* receiver) {
+
+
+  // the left child always is what is left in the sender so we dont need to make it point to the transaction info
+  Transaction_tree_node* left_child = new Transaction_tree_node(NULL,current_node->get_amount()-transaction_amount,sender);
+
+  Transaction_tree_node* right_child = new Transaction_tree_node(info,transaction_amount,receiver);
+
+  //we set up the pointers
+  current_node->set_left(left_child);
+  current_node->set_right(right_child);
+
+}
+
 
 
 //===FUNCTIONALITY==//
@@ -59,17 +73,10 @@ void Transaction_tree::New_Transaction(Transaction_info* info, char* sender,char
   Search_for_leaf(sender,leaf_list,this->root);
 
   // check if there is a token that can make the transaction by itself
-  Transaction_tree_node* transaction_leaf =leaf_list->Search(transaction_amount);
+  Transaction_tree_node* transaction_leaf = leaf_list->Search(transaction_amount);
 
   if(transaction_leaf!=NULL){
-    // we have our node
-    // make its children
-    Transaction_tree_node* left_child = new Transaction_tree_node(NULL,transaction_leaf->get_amount()-transaction_amount,sender);
-    Transaction_tree_node* right_child = new Transaction_tree_node(info,transaction_amount,receiver);
-
-    // set up the pointers
-    transaction_leaf->set_left(left_child);
-    transaction_leaf->set_right(right_child);
+    Insert_token(info,transaction_leaf,transaction_amount,sender,receiver);
   }
 
   // there is'nt any node that can complete the transaction by itself
@@ -80,30 +87,19 @@ void Transaction_tree::New_Transaction(Transaction_info* info, char* sender,char
 
       while (current!=NULL && amount_left>0){
 
+        //the current token can not fulfill the whole amount left
         if(current->get_item()->get_amount()<amount_left){
-
-          Transaction_tree_node* left_child = new Transaction_tree_node(NULL,0,sender);
-          Transaction_tree_node* right_child = new Transaction_tree_node(info,current->get_item()->get_amount(),receiver);
-
-          current->get_item()->set_left(left_child);
-          current->get_item()->set_right(right_child);
-
+          Insert_token(info,current->get_item(),current->get_item()->get_amount(),sender,receiver);
           amount_left = amount_left-current->get_item()->get_amount();
-
         }
 
+
+        //the current token can fulfil the amount left
         else{
-          Transaction_tree_node* left_child = new Transaction_tree_node(NULL,current->get_item()->get_amount()-amount_left,sender);
-          Transaction_tree_node* right_child = new Transaction_tree_node(info,amount_left,receiver);
-
-          current->get_item()->set_left(left_child);
-          current->get_item()->set_right(right_child);
-
+          Insert_token(info,current->get_item(),amount_left,sender,receiver);
           amount_left = amount_left- current->get_item()->get_amount();
-
         }
         current=current->get_next();
-
       }
   }
 
@@ -130,4 +126,13 @@ void Transaction_tree::Print_transactions(Hash_Table<Transaction_info*>* visited
     Print_transactions(visited,current->get_right());
 
 
+}
+
+
+//===OPERATOR==//
+bool Transaction_info::operator==(const char* id) {
+  if(!strcmp(this->transaction_id,id))
+    return true;
+  else
+    return false;
 }

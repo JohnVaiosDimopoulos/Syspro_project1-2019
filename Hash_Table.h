@@ -132,7 +132,7 @@ T Hash_Table<T>::Search(char* id) {
 template <class T>
 void Hash_Table<T>::Nullify() {
   for(int i =0;i<this->table_size;i++){
-    this->table[i]
+    this->table[i];
   }
 }
 

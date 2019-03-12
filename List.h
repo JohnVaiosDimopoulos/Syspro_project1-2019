@@ -91,8 +91,9 @@ T List<T>::Search(int& value){
     if(current->compare_item(value))
       return current->get_item();
     else
-      current=current->get_item();
+      current=current->get_next();
   }
+  return NULL;
 
 }
 

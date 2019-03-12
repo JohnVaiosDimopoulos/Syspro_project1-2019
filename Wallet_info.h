@@ -15,15 +15,18 @@ class Wallet_info {
   ~Wallet_info();
 
   //mutators
-  void update_bitcoin(char*,int);
+  void update_bitcoin_amount(char *, int);
 
   //accessors
   char* get_wallet_id() const;
-  List<Bitcoin_in_wallet*>* get_list();
+  List<Bitcoin_in_wallet*>* get_list() const;
+  int get_total_money() const;
 
   //operrator
-
   bool operator==(const char*);
+
+  //functionality
+  char* Find_proper_bitcoin(int&);
 
 };
 

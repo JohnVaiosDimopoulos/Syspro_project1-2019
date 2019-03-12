@@ -28,7 +28,7 @@ int Bitcoin_in_wallet::get_value() const {
 //==MUTATROS==//
 
 void Bitcoin_in_wallet::update_value(int value) {
-  this->value = value;
+  this->value += value;
 }
 
 //==OPERATOR==//

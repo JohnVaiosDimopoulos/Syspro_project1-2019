@@ -8,6 +8,8 @@ class Transaction_tree {
  private:
   Transaction_tree_node* root;
   void Search_for_leaf(char*,List<Transaction_tree_node*>*,Transaction_tree_node*);
+  void Insert_token(Transaction_info*,Transaction_tree_node*,int,char*,char*);
+
 
  public:
   //constructor-destructor

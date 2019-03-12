@@ -1,6 +1,6 @@
 #include "senders_receivers_data.h"
-#include "cstring"
-#include "cstdlib"
+#include <cstring>
+#include <cstdlib>
 
 //==CONSTRUCTOR-DESTRUCTOR==//
 
@@ -26,4 +26,15 @@ char* senders_receivers_data::get_id() const {
 void senders_receivers_data::Insert(Transaction_info* transaction) {
   senders_receivers_list_data* entry = new senders_receivers_list_data(transaction);
   this->transactions->Push(entry);
+}
+
+
+//===OPPERATOR===/
+
+bool senders_receivers_data::operator==(const char* id) {
+  if(!strcmp(this->wallet_id,id))
+    return true;
+  else
+    return false;
+
 }

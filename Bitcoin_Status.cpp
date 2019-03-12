@@ -17,6 +17,7 @@ Bitcoin_Status::Bitcoin_Status(int initial_value, char* id,char* initial_owner):
 
 Bitcoin_Status::~Bitcoin_Status() {
   free(bitcoin_id);
+  free(initial_owner);
   delete transaction_tree;
 }
 

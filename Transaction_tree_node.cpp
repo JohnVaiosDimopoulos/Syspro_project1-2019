@@ -8,7 +8,7 @@
 Transaction_tree_node::Transaction_tree_node(Transaction_info* info,int amount,char* owner) {
   this->info = info;
   this->amount=amount;
-  this->owner = (char*)malloc(sizeof(strlen(owner)+1));
+  this->owner = (char*)malloc(sizeof(char)*(strlen(owner)+1));
   strcpy(this->owner,owner);
 }
 

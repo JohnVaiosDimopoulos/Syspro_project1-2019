@@ -21,7 +21,8 @@ class Bitcoin_System {
   void Find_Earnings();
   void Find_Receivings();
   void Wallet_Status();
-  void Request_Transaction();
+  void Request_Transaction(char*,char*,char*,int&,int&,int&,int&,int&,int&);
+  void Update_tree_and_wallets(Transaction_info*,Wallet_info*,Wallet_info*,char*,int);
 
  public:
   // constructor-destructor
@@ -34,9 +35,6 @@ class Bitcoin_System {
 
   //Begin
   void Begin_System();
-
-
-
 
 };
 

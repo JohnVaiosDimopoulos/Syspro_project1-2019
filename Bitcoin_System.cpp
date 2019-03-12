@@ -128,6 +128,8 @@ void Bitcoin_System::Begin_System() {
 
 
 
+
+
 void Bitcoin_System::Find_Earnings() {
 
 
@@ -149,8 +151,87 @@ void Bitcoin_System::Trace_bitcoin() {
 
 }
 
-void Bitcoin_System::Request_Transaction() {
-  //TODO: after the tree is done implement the transaction method
+void Bitcoin_System::Update_tree_and_wallets(Transaction_info* transaction_info,Wallet_info* sender_wallet,Wallet_info* receiver_wallet,char* bitcoin_id, int transaction_amount){
+
+  //create the transaction in the tree of the bitcoin
+  Bitcoin_Status* bitcoin_for_transaction = bitcoins_status->Search(bitcoin_id);
+  bitcoin_for_transaction->New_Transaction(transaction_info,sender_wallet->get_wallet_id(),receiver_wallet->get_wallet_id(),transaction_amount);
+
+
+  //update the senders and the receivers wallet and also the status of the bitcoin involved
+  sender_wallet->update_bitcoin_amount(bitcoin_id,(-transaction_amount));
+  receiver_wallet->update_bitcoin_amount(bitcoin_id,transaction_amount);
+
+}
+
+
+void Bitcoin_System::Request_Transaction(char* transaction_id,char* sender_id,char* receiver_id,int& amount,int& day,int& mounth,int& year,int& hour,int& minute) {
+
+  //---1.Validation---//
+
+  //check if the transaction_id is valid
+  if((this->transactions->Search(transaction_id))!=NULL) {
+    std::cout<<"Invalid Transaction Id"<<std::endl;
+    return;
+  }
+  //check if the sender and the receiver actually exist
+  // get a pointer to each wallet to avoid searching all the time
+  Wallet_info* senders_wallet = this->wallets->Search(sender_id);
+  Wallet_info* receivers_wallet = this->wallets->Search(receiver_id);
+
+  if(senders_wallet==NULL||receivers_wallet==NULL){
+    std::cout<<"Invalid sender or receiver id"<<std::endl;
+    return;
+  }
+  //check if the sender actually has the money
+  if(senders_wallet->get_total_money()<amount){
+    std::cout<<"The sender does not have enough money to make the transaction"<<std::endl;
+    return;
+  }
+  //check if the hour of the transaction is vallid
+  //we compare it to the last transaction make which will be the head of our list
+  List_node<Transaction_info*>* last_transaction =this->transactions->get_head();
+  if(!(last_transaction->get_item()->is_after(year,mounth,day,hour,minute))){
+    std::cout<<"invalid transaction date"<<std::endl;
+  }
+
+
+
+  //---2.Make the transaction info and connect it---//
+
+  //put the transaction into the list and make the two hash_tables point to the transaction
+  Transaction_info* new_transaction = new Transaction_info(sender_id,receiver_id,transaction_id,amount,year,mounth,day,hour,minute);
+  this->transactions->Push(new_transaction);
+
+  //connect the senders_hash_table
+  senders_receivers_data* senders_data = this->senders->Search(sender_id);
+  senders_data->Insert(new_transaction);
+  //connect the receivers hash table
+  senders_receivers_data* receivers_data = this->receivers->Search(receiver_id);
+  receivers_data->Insert(new_transaction);
+
+
+
+
+  //---3.Make the actual Transaction---//
+
+  //-->check if the sender has a bitcoin that can make the transaction bu itself
+  char* bitcoin_id = senders_wallet->Find_proper_bitcoin(amount);
+
+  //there is such a bitcoin so we make the transaction
+  if(bitcoin_id!=NULL){
+    Update_tree_and_wallets(new_transaction,senders_wallet,receivers_wallet,bitcoin_id,amount);
+  }
+
+
+  else{
+
+
+  }
+
+
+
+
 
 }
 
