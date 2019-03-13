@@ -143,7 +143,7 @@ void List<T>::Nullify() {
   List_node<T>* current = this->head;
   while (current!=NULL){
     current->set_item(NULL);
-    current->get_next();
+    current=current->get_next();
   }
 }
 #endif //PROJECT1_VER3_LIST_H

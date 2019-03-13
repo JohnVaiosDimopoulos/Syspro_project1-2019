@@ -124,7 +124,7 @@ int main(int argc,char** argv) {
    Bitcoin_System* system = new Bitcoin_System(bucket_size,sender_hash_table_entries,receiver_hash_table_entries,bitcoins_table_size,users_table_size,bitcoin_val);
 
    system->Initialize_System(bitcoin_balance);
-//   system->Initial_Transactions(transaction_file);
+   system->Transactions_from_file(transaction_file);
 //   system->Begin_System();
 
   delete system;

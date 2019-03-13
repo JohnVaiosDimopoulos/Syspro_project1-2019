@@ -22,6 +22,7 @@ class Bitcoin_Status {
   int get_unspend_amount() const;
   int get_transactions_number() const;
   char* get_id() const;
+  char* get_initial_owners_id() const;
   Transaction_tree* get_transaction_tree() const;
 
   //mutators

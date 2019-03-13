@@ -32,6 +32,7 @@ int Wallet_info::get_total_money() const {
     total_money += current->get_item()->get_value();
     current = current->get_next();
   }
+  return total_money;
 }
 
 
@@ -49,7 +50,11 @@ void Wallet_info::update_bitcoin_amount(char *bitcoin_id, int amount) {
   }
   // if it has the bitcoin update the amount
   bitcoin->update_value(amount);
+  //if the user lost the bitcoin delete it from the list completely
+  if(bitcoin->get_value()<=0)
+    this->bitcoins_owned->Delete(bitcoin->get_id());
 }
+
 
 //===OPERATORS==//
 

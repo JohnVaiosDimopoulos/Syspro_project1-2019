@@ -5,7 +5,7 @@
 
 //==CONSTRACTOR-DESTRUCTOR==//
 
-Bitcoin_Status::Bitcoin_Status(int initial_value, char* id,char* initial_owner):initial_value(initial_value) {
+Bitcoin_Status::Bitcoin_Status(int initial_value, char* id,char* initial_owner):initial_value(initial_value),unspend_amount(initial_value) {
   this->bitcoin_id = (char*)malloc(sizeof(char)*(strlen(id)+1));
   strcpy(this->bitcoin_id,id);
 
@@ -42,6 +42,10 @@ char* Bitcoin_Status::get_id() const {
   return this->bitcoin_id;
 }
 
+char* Bitcoin_Status::get_initial_owners_id() const {
+  return this->initial_owner;
+}
+
 //==MUTATORS==//
 
 void Bitcoin_Status::increase_transaction_number() {
@@ -50,7 +54,10 @@ void Bitcoin_Status::increase_transaction_number() {
 
 void Bitcoin_Status::update_unspend_amount(int& amount) {
 
-  this->unspend_amount = this->unspend_amount-amount;
+  //if all the amount is spended we cant change it anymore
+  if(this->unspend_amount>0)
+    this->unspend_amount -=amount;
+
 }
 
 

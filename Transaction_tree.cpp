@@ -89,15 +89,18 @@ void Transaction_tree::New_Transaction(Transaction_info* info, char* sender,char
 
         //the current token can not fulfill the whole amount left
         if(current->get_item()->get_amount()<amount_left){
+          amount_left -= current->get_item()->get_amount();
           Insert_token(info,current->get_item(),current->get_item()->get_amount(),sender,receiver);
-          amount_left = amount_left-current->get_item()->get_amount();
+
         }
 
 
         //the current token can fulfil the amount left
         else{
-          Insert_token(info,current->get_item(),amount_left,sender,receiver);
-          amount_left = amount_left- current->get_item()->get_amount();
+          int money_to_take = amount_left;
+          amount_left -= current->get_item()->get_amount();
+          Insert_token(info,current->get_item(),money_to_take,sender,receiver);
+
         }
         current=current->get_next();
       }
@@ -106,7 +109,6 @@ void Transaction_tree::New_Transaction(Transaction_info* info, char* sender,char
   //clear the list and delete it
   leaf_list->Nullify();
   delete leaf_list;
-  return;
 }
 
 

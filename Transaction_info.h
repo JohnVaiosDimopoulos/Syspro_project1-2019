@@ -1,6 +1,7 @@
 #ifndef PROJECT1_VER3_TRANSACTION_INFO_H
 #define PROJECT1_VER3_TRANSACTION_INFO_H
 
+#include "Date.h"
 class Transaction_info {
 
  private:
@@ -8,11 +9,7 @@ class Transaction_info {
   char* receiver_id;
   char* transaction_id;
   const int amount;
-  const int year;
-  const int month;
-  const int day;
-  const int hour;
-  const int minutes;
+  Date date;
 
  public:
   //constructor-destructor
@@ -23,11 +20,6 @@ class Transaction_info {
   char* get_sender();
   char* get_receiver();
   int get_amount();
-  int get_year();
-  int get_mounth();
-  int get_day();
-  int get_hour();
-  int get_minutes();
   void print_info();
   char* get_transaction_id();
 

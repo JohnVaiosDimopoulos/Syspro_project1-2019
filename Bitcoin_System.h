@@ -10,6 +10,7 @@ class Bitcoin_System {
  private:
   const int bucket_size;
   const int bitcoin_value;
+  Date* most_recent;
   Hash_Table<Wallet_info*>* wallets;
   Hash_Table<Bitcoin_Status*>* bitcoins_status;
   Hash_Table<senders_receivers_data*>* senders;
@@ -21,8 +22,9 @@ class Bitcoin_System {
   void Find_Earnings();
   void Find_Receivings();
   void Wallet_Status();
-  void Request_Transaction(char*,char*,char*,int&,int&,int&,int&,int&,int&);
+  void Request_Transaction(char*,char*,char*,int&,int&,int&,int&,int&,int&,int);
   void Update_tree_and_wallets(Transaction_info*,Wallet_info*,Wallet_info*,char*,int);
+  void Get_current_date(int*,int*,int*,int*,int*);
 
  public:
   // constructor-destructor
@@ -31,7 +33,7 @@ class Bitcoin_System {
 
   //Initialization
   void Initialize_System(char*);
-  void Initial_Transactions(char*);
+  void Transactions_from_file(char *);
 
   //Begin
   void Begin_System();
