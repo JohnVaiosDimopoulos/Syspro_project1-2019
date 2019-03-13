@@ -1,4 +1,5 @@
 #include "Wallet_info.h"
+#include <iostream>
 #include <cstdlib>
 #include <cstring>
 
@@ -35,6 +36,15 @@ int Wallet_info::get_total_money() const {
   return total_money;
 }
 
+
+void Wallet_info::Print_all_bitcoins() {
+  List_node<Bitcoin_in_wallet*>* current = bitcoins_owned->get_head();
+
+  while (current!=NULL){
+    std::cout<<"Bitcoin ID: "<<current->get_item()->get_id()<<"AMOUNT: "<<current->get_item()->get_value()<<std::endl;
+    current = current->get_next();
+  }
+}
 
 
 //==MUTATORS==//

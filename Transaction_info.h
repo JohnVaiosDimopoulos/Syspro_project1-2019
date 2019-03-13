@@ -17,11 +17,12 @@ class Transaction_info {
   ~Transaction_info();
 
   //accessors
-  char* get_sender();
-  char* get_receiver();
-  int get_amount();
-  void print_info();
-  char* get_transaction_id();
+  char* get_sender() const;
+  char* get_receiver() const ;
+  int get_amount() const ;
+  void print_info() const ;
+  char* get_transaction_id() const ;
+  Date get_date() const;
 
   //other
   bool is_after(int&,int&,int&,int&,int&);

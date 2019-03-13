@@ -1,4 +1,5 @@
 #include "Bitcoin_System.h"
+#define INGORE 100000
 #include <fstream>
 #include <iostream>
 #include <ctime>
@@ -163,6 +164,50 @@ void Bitcoin_System::Initialize_System(char* bitcoin_balances){
 
 void Bitcoin_System::Begin_System() {
   //TODO:Do the UI method
+  char instruction[25],param[25],param2[25],param3[25],param4[25];
+
+  bool work = true;
+  while(work){
+
+    std::cout<<"Please give the instruction"<<std::endl;
+
+    std::cin>>instruction;
+    if(!strcmp(instruction,"requestTransaction")){
+
+    }
+    else if(!strcmp(instruction,"requestTransactions")){
+
+
+
+    }
+    else if(!strcmp(instruction,"findEarnings")){
+
+    }
+    else if(!strcmp(instruction,"findPayments")){
+
+    }
+    else if(!strcmp(instruction,"walletStatus")){
+      std::cin>>param;
+      std::cin.ignore(INGORE,'\n');
+      Wallet_Status(param);
+    }
+    else if(!strcmp(instruction,"bitCoinStatus")){
+      std::cin>>param;
+      std::cin.ignore(INGORE,'\n');
+      Bitcoin_Stat(param);
+    }
+    else if(!strcmp(instruction,"traceCoin")) {
+      std::cin>>param;
+      std::cin.ignore(INGORE,'\n');
+      Trace_bitcoin(param);
+
+    }
+    else if(!strcmp(instruction,"exit"))
+      work= false;
+    else
+      std::cout<<"WRONG INSTRUCTION TRY AGAIN"<<std::endl;
+  }
+
 
 }
 
@@ -176,25 +221,131 @@ void Bitcoin_System::Begin_System() {
 
 
 
-void Bitcoin_System::Find_Earnings() {
+void Bitcoin_System::Find_Earnings_and_Payments(Hash_Table<senders_receivers_data*>* table,char *wallet_id, char *time1, char *time2, char *date1, char *date2){
+
+  if((time1==NULL && time2!=NULL)||(time2==NULL && time1!=NULL)){
+    std::cout<<"YOU NEED TO GIVE A PAIR OF TIMES"<<std::endl;
+    return;
+  }
+
+  if((date1==NULL && time2!=NULL)||(date2==NULL && date1!=NULL)){
+    std::cout<<"YOU NEED TO GIVE A PAIR OF DATES"<<std::endl;
+    return;
+  }
+
+  if(table->Search(wallet_id)==NULL){
+    std::cout<<"THE ID DOES NOT EXIST"<<std::cout;
+    return;
+  }
+
+  // only check with a ragne of time
+  if(date1==NULL && date2==NULL && time1!=NULL && time2!=NULL){
+
+    char* hour,* min;
+    hour=strtok(time1,":");
+    min=strtok(NULL," ");
+    Date lower_bound(0,0,0,atoi(hour),atoi(min));
+
+    hour = strtok(time2,":");
+    min = strtok(NULL," ");
+    Date upper_bound(0,0,0,atoi(hour),atoi(min));
+
+    table->Search(wallet_id)->print_in_range_of_time(lower_bound,upper_bound);
+
+  }
+  // only check with a range of date
+  else if(time1==NULL && time2==NULL && date1!=NULL && date2!=NULL){
+    char* year,*month,*day;
+
+    year=strtok(date1,"-");
+    month=strtok(NULL,"-");
+    day=strtok(NULL," ");
+    Date lower_bound(atoi(year),atoi(month),atoi(day),0,0);
+
+    year=strtok(date1,"-");
+    month=strtok(NULL,"-");
+    day=strtok(NULL," ");
+    Date upper_bound(atoi(year),atoi(month),atoi(day),0,0);
+
+    table->Search(wallet_id)->print_in_range_of_date(lower_bound,upper_bound);
+
+  }
+  else if(time1!=NULL && time2!=NULL && date1!=NULL && date2!=NULL){
+    char* hour,* min,* year,*month,*day;
+
+    year=strtok(date1,"-");
+    month=strtok(NULL,"-");
+    day=strtok(NULL," ");
+    hour=strtok(NULL,":");
+    min=strtok(NULL," ");
+    Date lower_bound(atoi(year),atoi(month),atoi(day),atoi(hour),atoi(min));
+
+    year=strtok(date2,"-");
+    month=strtok(NULL,"-");
+    day=strtok(NULL," ");
+    hour=strtok(NULL,":");
+    min=strtok(NULL," ");
+    Date upper_bound(atoi(year),atoi(month),atoi(day),atoi(hour),atoi(min));
+
+    table->Search(wallet_id)->print_in_range_of_full_date(lower_bound,upper_bound);
+
+
+
+  }
+  //print all the transactions
+  else{
+    table->Search(wallet_id)->printList();
+  }
+
+
+
+
+
+
+
+
+
+
 
 
 }
 
-void Bitcoin_System::Find_Receivings() {
 
+void Bitcoin_System::Bitcoin_Stat(char* bitcoin_id){
+  Bitcoin_Status* bitcoin = this->bitcoins_status->Search(bitcoin_id);
+
+  //check if the bitcoin exists
+  if(bitcoin==NULL){
+    std::cout<<"ERROR THE BITCOIN DOES NOT EXIST"<<std::endl;
+    return;
+  }
+
+  std::cout<<"ID: "<<bitcoin->get_id()<<" NUMBER OF TRANSACTIONS: "<<bitcoin->get_transactions_number()<<" UNSPEND AMOUNT"<<bitcoin->get_unspend_amount()<<std::endl;
 }
 
-void Bitcoin_System::Bitcoin_Stat() {
+void Bitcoin_System::Wallet_Status(char* wallet_id){
+  Wallet_info* wallet = this->wallets->Search(wallet_id);
+  //check if the id was valid
+  if(wallet==NULL){
+    std::cout<<"ERROR:THE USER DOES NOT EXIST"<<std::endl;
+    return;
+  }
 
+  std::cout<<"USER: "<<wallet->get_wallet_id()<<std::endl;
+  std::cout<<" TOTAL MONEY: "<<wallet->get_total_money()<<std::endl;
+  wallet->Print_all_bitcoins();
 }
 
-void Bitcoin_System::Wallet_Status() {
+void Bitcoin_System::Trace_bitcoin(char* bitcoin_id){
 
-}
+  Bitcoin_Status* bitcoin = this->bitcoins_status->Search(bitcoin_id);
 
-void Bitcoin_System::Trace_bitcoin() {
-
+  //check if the bitcoin exists
+  if(bitcoin==NULL){
+    std::cout<<"ERROR THE BITCOIN DOES NOT EXIST"<<std::endl;
+    return;
+  }
+  bitcoin->Print_Transactions(this->bucket_size);
 }
 
 

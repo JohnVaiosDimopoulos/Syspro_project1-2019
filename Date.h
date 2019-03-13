@@ -13,8 +13,17 @@ class Date {
   Date(int year=0,int month=0,int day=0,int hour=0,int minute=0);
 
   //functionality
-  bool is_after(int&,int&,int&,int&,int&);
-  void Print_date();
+  bool is_after(int,int,int,int,int);
+  bool is_after_time(Date date);
+  bool is_after_date(Date date);
+  void Print_date() const;
+
+  //accessors
+  int get_year() const;
+  int get_month() const;
+  int get_day() const;
+  int get_hour() const;
+  int get_minutes() const;
 
 };
 

@@ -21,6 +21,7 @@ class Wallet_info {
   char* get_wallet_id() const;
   List<Bitcoin_in_wallet*>* get_list() const;
   int get_total_money() const;
+  void Print_all_bitcoins();
 
   //operrator
   bool operator==(const char*);

@@ -9,7 +9,7 @@ Date::Date(int year,int month,int day,int hour,int minute):year(year),month(mont
 
 //==FUNCTIONALITY==//
 
-bool Date::is_after(int& year, int & month, int & day,int& hour,int& minutes){
+bool Date::is_after(int year, int month, int day,int hour,int minutes){
 
   // compare the year
   if(this->year<year)
@@ -43,8 +43,59 @@ bool Date::is_after(int& year, int & month, int & day,int& hour,int& minutes){
     return false;
 }
 
+bool Date::is_after_date(Date date) {
+  if(this->year<date.get_year())
+    return true;
+  else if(this->year==date.get_year()){
+    //check month
+    if(this->month<date.get_month())
+      return true;
+    else if(this->month==date.get_month()){
+      //check day
+      if(this->day<date.get_day())
+        return true;
+      else
+        return false;
+    } else
+      return false;
+  } else
+    return false;
+}
 
-void Date::Print_date() {
+bool Date::is_after_time(Date date) {
+  if(this->hour<date.get_hour())
+    return true;
+  else if(this->hour==date.get_hour()){
+    if(this->minutes<date.minutes)
+      return true;
+    else
+      return false;
+  }
+  return false;
+}
+
+void Date::Print_date() const {
   std::cout<<this->day<<"-"<<this->month<<"-"<<this->year<<" "<<this->hour<<":"<<this->minutes;
 }
 
+//===ACCESSORS==//
+
+int Date::get_year() const {
+  return this->year;
+}
+
+int Date::get_month() const {
+  return this->month;
+}
+
+int Date::get_day() const {
+  return this->day;
+}
+
+int Date::get_hour() const {
+  return this->hour;
+}
+
+int Date::get_minutes() const {
+  return this->minutes;
+}

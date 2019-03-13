@@ -17,11 +17,10 @@ class Bitcoin_System {
   Hash_Table<senders_receivers_data*>* receivers;
   List<Transaction_info*>* transactions;
 
-  void Trace_bitcoin();
-  void Bitcoin_Stat();
-  void Find_Earnings();
-  void Find_Receivings();
-  void Wallet_Status();
+  void Trace_bitcoin(char*);
+  void Bitcoin_Stat(char*);
+  void Find_Earnings_and_Payments(Hash_Table<senders_receivers_data*>* table,char *wallet_id,char *time1,char *time,char *date1,char *date2);
+  void Wallet_Status(char*);
   void Request_Transaction(char*,char*,char*,int&,int&,int&,int&,int&,int&,int);
   void Update_tree_and_wallets(Transaction_info*,Wallet_info*,Wallet_info*,char*,int);
   void Get_current_date(int*,int*,int*,int*,int*);
