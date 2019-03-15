@@ -9,14 +9,14 @@
 static void find_total_users_and_bitcoins(int* total_users,int* total_bitcoins,char* bitcoin_balances){
   int usr =0;
   int bt =0;
-  char buffer[256];
+  char buffer[512];
   char* temp_ptr;
   // open the balances file
   std::fstream balances_file;
   balances_file.open(bitcoin_balances,std::fstream::in);
   if(balances_file.is_open()){
     // read the file line by line
-    while(balances_file.getline(buffer,256)) {
+    while(balances_file.getline(buffer,512)) {
       //split each line word by word;
       temp_ptr = strtok(buffer, " ");
       (*total_users)++;
@@ -93,24 +93,7 @@ static void manage_inline_arguments(int argc,char** argv,int*bucket_size,int* bi
 
 int main(int argc,char** argv) {
 
-/*
-  const int size = 4;
-
-  Wallet_info user("name");
-  Hash_Table<Wallet_info>* ht = new Hash_Table<Wallet_info>(10,size);
-  ht->Insert(user,user.get_wallet_id());
-  Wallet_info usr = ht->Search("name");
-  List<Bitcoin_in_wallet*>*  list =usr.get_list();
-  Bitcoin_in_wallet* coin = new Bitcoin_in_wallet("123",40);
-  list->Push(coin);
-  list->Delete("123");
-  delete ht;
-
-*/
-
-
-
-  int bitcoin_val,sender_hash_table_entries,receiver_hash_table_entries,bucket_size,total_users,total_bitcoins,bitcoins_table_size,users_table_size;
+  int bitcoin_val,sender_hash_table_entries,receiver_hash_table_entries,bucket_size,total_users=0,total_bitcoins=0,bitcoins_table_size=0,users_table_size=0;
   char* bitcoin_balance,*transaction_file;
 
    // manage inline arguments
@@ -124,8 +107,9 @@ int main(int argc,char** argv) {
    Bitcoin_System* system = new Bitcoin_System(bucket_size,sender_hash_table_entries,receiver_hash_table_entries,bitcoins_table_size,users_table_size,bitcoin_val);
 
    system->Initialize_System(bitcoin_balance);
-   system->Transactions_from_file(transaction_file);
-//   system->Begin_System();
+   system->Initial_Transactions(transaction_file);
+   system->set_max_transaction_id();
+   system->Begin_System();
 
   delete system;
   free(transaction_file);

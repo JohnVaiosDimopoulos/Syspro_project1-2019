@@ -8,7 +8,7 @@
 Transaction_info::Transaction_info(char* sender, char* receiver,char* transaction,int& amount, int& year, int& month, int& day,int& hour,int& minutes):amount(amount),date(year,month,day,hour,minutes){
   this->sender_id = (char*)malloc(sizeof(char)*(strlen(sender)+1));
   this->receiver_id = (char*)malloc(sizeof(char)*(strlen(receiver)+1));
-  this->transaction_id = (char*)malloc(sizeof(char*)*(strlen(transaction)+1));
+  this->transaction_id = (char*)malloc(sizeof(char)*(strlen(transaction)+1));
   strcpy(this->sender_id,sender);
   strcpy(this->receiver_id,receiver);
   strcpy(this->transaction_id,transaction);
@@ -40,21 +40,11 @@ char* Transaction_info::get_transaction_id() const {
 
 
 void Transaction_info::print_info() const {
-  std::cout<<"Transaction: "<<this->transaction_id<<" Sender: "<<this->sender_id<<" Receiver: "<<this->receiver_id<<" Amount: "<<this->amount<<"Date:";
+  std::cout<<"Transaction: "<<this->transaction_id<<" Sender: "<<this->sender_id<<" Receiver: "<<this->receiver_id<<" Amount: "<<this->amount<<" Date: ";
   this->date.Print_date();
   std::cout<<std::endl;
 }
 
 Date Transaction_info::get_date() const {
   return this->date;
-}
-
-//===OTHER==//
-
-bool Transaction_info::is_after(int& year, int & month, int & day,int& hour,int& minutes){
-
-  if(this->date.is_after(year,month,day,hour,minutes))
-    return true;
-  else
-    return false;
 }

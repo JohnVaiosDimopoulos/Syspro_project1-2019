@@ -55,8 +55,12 @@ void Bitcoin_Status::increase_transaction_number() {
 void Bitcoin_Status::update_unspend_amount(int& amount) {
 
   //if all the amount is spended we cant change it anymore
-  if(this->unspend_amount>0)
-    this->unspend_amount -=amount;
+  if(this->unspend_amount > 0) {
+    this->unspend_amount -= amount;
+    // if it became less than 0 make it 0
+    if(this->unspend_amount<0)
+      this->unspend_amount=0;
+  }
 
 }
 
@@ -78,6 +82,8 @@ void Bitcoin_Status::Print_Transactions(int bucket_size){
     // we want 70% loading factor
     int entries_per_bucket = (bucket_size- (sizeof(Hash_Bucket<Transaction_info*>)+ sizeof(unsigned int)/ sizeof(Transaction_info*)));
     table_size = transactions_number/(0.7*entries_per_bucket);
+    if(table_size==0)
+      table_size=1;
   }
   else
     table_size = 1;

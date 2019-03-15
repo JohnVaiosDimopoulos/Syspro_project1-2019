@@ -24,9 +24,6 @@ class Transaction_info {
   char* get_transaction_id() const ;
   Date get_date() const;
 
-  //other
-  bool is_after(int&,int&,int&,int&,int&);
-
   //opperator
   bool operator==(const char*);
 };

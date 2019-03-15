@@ -20,10 +20,7 @@ class senders_receivers_data {
   //accessors
   char* get_id() const;
   void printList();
-  void print_in_range_of_time(Date date1,Date date2);
   void print_in_range_of_date(Date date1,Date date2);
-  void print_in_range_of_full_date(Date date1,Date date2);
-
   //functionality
   void Insert(Transaction_info*);
 

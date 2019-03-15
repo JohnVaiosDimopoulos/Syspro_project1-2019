@@ -5,73 +5,42 @@
 //===CONSTRUCTOR==//
 
 Date::Date(int year,int month,int day,int hour,int minute):year(year),month(month),day(day),minutes(minute),hour(hour){
+  //calc timestamp;
+  struct tm tm;
+  time_t rawtime;
+  time(&rawtime);
+  tm =*localtime(&rawtime);
+  tm.tm_year=year-1900;
+  tm.tm_mon =month-1;
+  tm.tm_mday = day;
+  tm.tm_hour=hour;
+  tm.tm_min =minute;
+  this->timestamp = mktime(&tm);
+
 }
 
 //==FUNCTIONALITY==//
 
-bool Date::is_after(int year, int month, int day,int hour,int minutes){
+bool Date::is_after(Date date){
 
-  // compare the year
-  if(this->year<year)
-    // the input date is after the current one
-    return true;
-  else if(this->year==year){
-    // we need to check month
-    if(this->month<month)
+  if(date.get_year()==0){
+    // we compare only the times
+    if(this->hour>date.hour)
       return true;
-    else if(this->month == month){
-      // we need to check day
-      if(this->day<day)
-        return true;
-      else if(this->day == day){
-        // we need to check hours
-        if(this->hour<hour)
-          return true;
-          // we need to check minutes
-        else if(this->hour==hour){
-          if(this->minutes<minutes)
-            return true;
-          else
-            return false;
-        }else
-          return false;
-      }else
-        return false;
-    }else
-      return false;
-  }else
-    return false;
-}
-
-bool Date::is_after_date(Date date) {
-  if(this->year<date.get_year())
-    return true;
-  else if(this->year==date.get_year()){
-    //check month
-    if(this->month<date.get_month())
-      return true;
-    else if(this->month==date.get_month()){
-      //check day
-      if(this->day<date.get_day())
+    else if(this->hour==date.hour){
+      if(this->minutes>date.minutes)
         return true;
       else
         return false;
-    } else
-      return false;
-  } else
+    }
     return false;
-}
-
-bool Date::is_after_time(Date date) {
-  if(this->hour<date.get_hour())
-    return true;
-  else if(this->hour==date.get_hour()){
-    if(this->minutes<date.minutes)
-      return true;
-    else
-      return false;
   }
-  return false;
+
+  if(this->timestamp > date.timestamp)
+    return true;
+  else
+    return false;
+
 }
 
 void Date::Print_date() const {

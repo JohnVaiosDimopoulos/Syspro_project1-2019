@@ -116,8 +116,8 @@ void Transaction_tree::New_Transaction(Transaction_info* info, char* sender,char
 
 void Transaction_tree::Print_transactions(Hash_Table<Transaction_info*>* visited,Transaction_tree_node* current){
 
-  // if the transaction of the token is not visited print it
-  if((visited->Search(current->get_transaction()->get_transaction_id()))==NULL) {
+  // if the token contains a transaction and it is not visited then print the transaction
+  if((current->get_transaction()!=NULL) && (visited->Search(current->get_transaction()->get_transaction_id()))==NULL ) {
     current->Print_transaction();
     visited->Insert(current->get_transaction(), current->get_transaction()->get_transaction_id());
   }
